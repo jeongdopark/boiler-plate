@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../../../_actions/user_action'
-const LoginPage = () => {
+import { useNavigate } from "react-router-dom";
+function LoginPage(props){
     const dispatch = useDispatch();
     const [Email, setEmail] = useState("")
     const [Password, setPassword] = useState("")
-
+    const navigate = useNavigate();
     const onEmailHandler = (event) => {
         setEmail(event.currentTarget.value)
     }
@@ -17,10 +18,18 @@ const LoginPage = () => {
     const onSubmitHandler = (event) => {
         event.preventDefault();
         let body = {
-            emial : Email,
+            email : Email,
             password : Password
         }
+
         dispatch(loginUser(body))
+        .then(response => {
+            if(response.payload.loginSuccess) {
+                navigate('/')
+            }else{
+                alert('Error')
+            }
+        })
         
     }
 
@@ -41,9 +50,9 @@ const LoginPage = () => {
                     Login
                 </button>
             </form>
-            
         </div>
     )
 }
 
 export default LoginPage
+
